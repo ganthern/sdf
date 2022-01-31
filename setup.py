@@ -2,6 +2,10 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 import sys
 import setuptools
+import os
+
+os.environ["CC"] = "g++"
+os.environ["CXX"] = "g++"
 
 __version__ = '0.1.8'
 
@@ -16,6 +20,10 @@ class get_pybind_include(object):
         import pybind11
         return pybind11.get_include()
 
+def get_python_includes():
+    """slicer doesn't include all python dev headers, which is why I put then in here.
+    """
+    return os.path.join(os.path.dirname(__file__), "include", "python3.6m")
 
 def find_eigen(min_ver=(3, 2, 0)):
     """Helper to find or download the Eigen C++ library"""
@@ -102,6 +110,7 @@ ext_modules = [
             ['src/sdf.cpp', 'src/util.cpp', 'src/renderer.cpp', 'pybind.cpp']),
         include_dirs=[
             'include',
+            get_python_includes(),
             # Path to pybind11 headers
             get_pybind_include(),
             # Eigen 3
@@ -118,6 +127,7 @@ def has_flag(compiler, flagname):
     """
     import tempfile
     import os
+    print(compiler)
     with tempfile.NamedTemporaryFile('w', suffix='.cpp', delete=False) as f:
         f.write('int main (int argc, char **argv) { return 0; }')
         fname = f.name
