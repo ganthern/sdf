@@ -23,7 +23,7 @@ class get_pybind_include(object):
 def get_python_includes():
     """slicer doesn't include all python dev headers, which is why I put then in here.
     """
-    return os.path.join(os.path.dirname(__file__), "include", "python3.6m")
+    return os.path.join(os.path.dirname(__file__), "include", "python3.10")
 
 def find_eigen(min_ver=(3, 2, 0)):
     """Helper to find or download the Eigen C++ library"""
